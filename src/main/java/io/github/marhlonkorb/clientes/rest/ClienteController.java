@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
@@ -22,14 +24,26 @@ public class ClienteController {
     @GetMapping("{id}")
     public Cliente buscarPorId(@PathVariable Integer id){
         return repository.findById(id).
-                orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado."));
     }
 
     /*@RequestBody realiza o parse de uma requisição recebendo um objeto do tipo JSON para um objeto do tipo Cliente*/
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)/*Caso a solicitação seja concluída com sucesso, a aplicação retorna o status de CREATED para o cliente*/
-    public Cliente salvar(@RequestBody Cliente cliente){
+    public Cliente salvar(@RequestBody @Valid Cliente cliente){
         return repository.save(cliente);
+    }
+
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void atualizar(@PathVariable Integer id, @RequestBody @Valid Cliente clienteAtualizado){
+        repository.findById(id).
+                map(cliente -> {
+                    cliente.setNome(clienteAtualizado.getNome());
+                    cliente.setCpf(clienteAtualizado.getCpf());
+                    return repository.save(clienteAtualizado);
+                }).
+                orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado."));
     }
 
     /*O método foi criado para encontrar primeiramente o cliente pelo ID e caso não seja encontrado, lançará uma exception.*/
@@ -42,7 +56,7 @@ public class ClienteController {
                     /*retorno Void.TYPE inserido pela necessidade do método map ter algum tipo de retorno.*/
                     return Void.TYPE;
                 }).
-                orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado."));
     }
 
 }
