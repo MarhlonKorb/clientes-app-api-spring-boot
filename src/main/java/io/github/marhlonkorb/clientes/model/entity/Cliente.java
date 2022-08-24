@@ -2,7 +2,6 @@ package io.github.marhlonkorb.clientes.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.hibernate.validator.constraints.br.CPF;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -25,7 +24,7 @@ public class Cliente {
 
     @Column(nullable = false, length = 11)
     @NotNull(message = "{campo.cpf.obrigatorio}")
-    @CPF(message = "{campo.cpf.invalido}")
+    
     private String cpf;
 
     @Column(name = "data_cadastro", updatable = false)
