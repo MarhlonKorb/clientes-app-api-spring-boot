@@ -10,21 +10,24 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/clientes")
 @CrossOrigin("http://localhost:4200")
 public class ClienteController {
 
     /*Duas formas de injetar dependências: a primeira ou a segunda utilizando o método construtor da classe a ser injetada.*/
-    private final ClienteRepository repository;
-
+    
     @Autowired
+    private ClienteRepository repository;
+
+    /*@Autowired
     public ClienteController(ClienteRepository repository) {
         this.repository = repository;
-    }
+    }*/
 
     @GetMapping
-    List<Cliente> getListaClientes(){
+    public List<Cliente> getListaClientes(){
         return repository.findAll();
     }
     
