@@ -16,15 +16,10 @@ import java.util.List;
 @CrossOrigin("http://localhost:4200")
 public class ClienteController {
 
-    /*Duas formas de injetar dependências: a primeira ou a segunda utilizando o método construtor da classe a ser injetada.*/
+    /* Duas formas de injetar dependências: a primeira ou a segunda utilizando o método construtor da classe a ser injetada.*/
     
     @Autowired
     private ClienteRepository repository;
-
-    /*@Autowired
-    public ClienteController(ClienteRepository repository) {
-        this.repository = repository;
-    }*/
 
     @GetMapping
     public List<Cliente> getListaClientes(){
@@ -32,14 +27,14 @@ public class ClienteController {
     }
     
     @GetMapping("{id}")
-    public Cliente buscarPorId(@PathVariable Integer id){
+    public Cliente findById(@PathVariable Integer id){
         return repository.findById(id).
                 orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado."));
     }
 
-    /*@RequestBody realiza o parse de uma requisição recebendo um objeto do tipo JSON para um objeto do tipo Cliente*/
+    /* @RequestBody realiza o parse de uma requisição recebendo um objeto do tipo JSON para um objeto do tipo Cliente */
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)/*Caso a solicitação seja concluída com sucesso, a aplicação retorna o status de CREATED para o cliente*/
+    @ResponseStatus(HttpStatus.CREATED)/* Caso a solicitação seja concluída com sucesso, a aplicação retorna o status de CREATED para o cliente */
     public Cliente salvar(@RequestBody @Valid Cliente cliente){
         return repository.save(cliente);
     }
@@ -57,7 +52,7 @@ public class ClienteController {
     }
 
     /*O método foi criado para encontrar primeiramente o cliente pelo ID e caso não seja encontrado, lançará uma exception.*/
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Integer id){
         repository.findById(id).
