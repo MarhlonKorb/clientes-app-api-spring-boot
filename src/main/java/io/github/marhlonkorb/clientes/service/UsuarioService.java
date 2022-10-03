@@ -2,6 +2,7 @@ package io.github.marhlonkorb.clientes.service;
 
 import io.github.marhlonkorb.clientes.model.entity.Usuario;
 import io.github.marhlonkorb.clientes.repository.UsuarioRepository;
+import io.github.marhlonkorb.clientes.rest.exception.UsuarioCadastradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,14 @@ public class UsuarioService implements UserDetailsService {
     
     @Autowired
     UsuarioRepository usuarioRepository;
+    
+    public Usuario salvar(Usuario usuario){
+        boolean exists = usuarioRepository.existsByUsername(usuario.getUsername());
+        if (exists){
+        throw new UsuarioCadastradoException(usuario.getUsername());
+        }
+        return usuarioRepository.save(usuario);
+    }
     
     /**
      * Método responsável por realizar a busca e validação pelo username no database
