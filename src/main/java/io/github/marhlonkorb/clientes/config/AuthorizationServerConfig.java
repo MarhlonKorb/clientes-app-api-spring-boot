@@ -29,7 +29,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
     
     /**
-     * Método que receberá a chave token do arquivo configuration.properties
+     * Método que recebe a chave token do arquivo configuration.properties
      * @return tokenConverter
      */
     @Bean
